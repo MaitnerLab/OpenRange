@@ -1,8 +1,8 @@
 ################################
 
-#'Run an SQL query on the BIEN database.
+#'Run an SQL query on the OpenRange database.
 #'
-#'.BIEN_sql is an internal function used to submit SQL queries.
+#'ranges_sql is an internal function used to submit SQL queries.
 #' @param query A PostgreSQL query.
 #' @param user The username used to access the BIEN database
 #' @param password The password associated with the username
@@ -16,7 +16,7 @@
 #' @keywords internal
 #' @import RPostgreSQL
 #' @examples \dontrun{
-#' .BIEN_sql("SELECT DISTINCT  scenario_id, scenario, scenario_filecode, time_period, climate_model, rcp
+#' ranges_sql("SELECT DISTINCT  scenario_id, scenario, scenario_filecode, time_period, climate_model, rcp
 #' FROM ranges.range ;")}
 ranges_sql<-function(query,
                     user = 'public_bien',
@@ -24,13 +24,12 @@ ranges_sql<-function(query,
                     ranges = NULL,
                     limit = NULL,
                     return.query = FALSE,
-                    schema="analytical_db",
-                    db_name='vegbien',
-                    print.query=FALSE){
+                    schema = "analytical_db",
+                    db_name = 'vegbien',
+                    print.query = FALSE){
 
   # user <- 'public_bien'
   # password <- 'bien_public'
-  
   
   # .is_char(query)
   # .is_char(user)
