@@ -24,5 +24,6 @@ Suggests:
     knitr,
     rmarkdown,
     testthat,
-    maps
+    maps,
+    tidyverse
 VignetteBuilder: knitr

@@ -17,9 +17,9 @@ Open Range is a database containing Open Access species range maps and associate
 The maps currently contained in the Open Range database are available with a CC-BY license, but we note that additional maps using alternative licenses may be applied in the future.
 
 
-# Accessing the maps
+### Accessing the maps
 The easiest way to access the species range maps is by querying a species name.
-```{r}
+```{r load species}
 
 library(OpenRange)
 
@@ -27,5 +27,36 @@ library(OpenRange)
 pcontorta <- OpenRange_load_species(species = "Pinus contorta")
 
 plot(pcontorta[2])
+
+```
+
+### Checking map quality
+This is a bit cumbersome, but keep in mind this is a pre-alpha version.  For now, you can use the function OpenRange_get_stats
+
+```{r get metadata}
+
+library(tidyverse)
+
+# Grab the stats
+  model_stats <- OpenRange_get_stats()
+
+# Reformat them into a single table
+
+  model_stats_wide <- dplyr::bind_rows(model_stats$rangebagging %>%
+                     mutate(algorithm = "rangebagging"),
+                   model_stats$ppm %>%
+                     mutate(algorithm = "ppm"),
+                   model_stats$points %>%
+                     mutate(algorithm = "points"))
+
+
+# Get relevant model stats
+  
+  model_stats_wide %>%
+    filter(model_id == pcontorta$model_id)->test
+
+  test %>%
+    select(cv_mean_train_npresence,cv_mean_test_n_presence,cv_mean_test_auc,cv_mean_train_auc)
+
 
 ```
