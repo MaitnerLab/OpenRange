@@ -45,25 +45,38 @@ OpenRange_list_scenarios <- function(...){
 #' @note Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
 #' @return Range maps for specified species.
 #' @examples \dontrun{
-#' library(maps) #a convenient source of maps
-#' species_vector <- c("Abies_lasiocarpa","Abies_amabilis")
-#' BIEN_ranges_species(species_vector)
-#' BIEN_ranges_species(species_vector,match_names_only = TRUE)
-#' temp_dir <- file.path(tempdir(), "BIEN_temp")#Create a working directory
-#' BIEN_ranges_species(species_vector,temp_dir)#saves ranges to a temporary directory
-#' BIEN_ranges_species("Abies_lasiocarpa",temp_dir)
-#'
-#' #Reading files
 #' 
-#' Abies_poly <- readOGR(dsn = temp_dir,layer = "Abies_lasiocarpa")
-#' 
-#' #Plotting files
-#' plot(Abies_poly)#plots the range, but doesn't mean much without any reference
-#' map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
-#' plot(Abies_poly,col="forest green",add=TRUE) #adds the range of Abies lasiocarpa to the map
+#'library(maps) #a convenient source of maps
 #'
-#' #Getting data from the files (currently only species names)
-#' Abies_poly$Species#gives the species name associated with "Abies_poly"}
+#'species_vector <- c("Abies_lasiocarpa","Abies_amabilis")
+#'
+#'#check whether the species are available
+#'OpenRange_species(species_vector,match_names_only = TRUE)
+#'
+#'#Create a temp directory
+#'temp_dir <- file.path(tempdir(), "BIEN_temp")
+#'
+#'#Download ranges
+#'OpenRange_species(species = species_vector,
+#'                  directory = temp_dir)#saves ranges to a temporary directory
+#'
+#'OpenRanges_species("Abies_lasiocarpa",temp_dir)
+#'
+#'#Reading files
+#'
+#'Abies_poly <- st_read(dsn = temp_dir,
+#'                      layer = "Abies_amabilis_117684")
+#'
+#'#Plotting files
+#'plot(Abies_poly[,1])#plots the range, but doesn't mean much without any reference
+#'map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
+#'plot(Abies_poly,col="forest green",add=TRUE) #adds the range of Abies lasiocarpa to the map
+#'
+#'#Getting data from the files
+#'Abies_poly %>%
+#'  st_drop_geometry()
+#'
+#' }
 #' @family range functions
 #' @importFrom sf st_as_sf st_write
 #' @export
