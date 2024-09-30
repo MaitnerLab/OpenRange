@@ -307,12 +307,17 @@ OpenRange_load_species <- function(species, default_only = T, projection = 4326,
 #' @template ranges_spatial
 #' @return All range maps that intersect the user-supplied shapefile.
 #' @examples \dontrun{
-#' 
-#' BIEN_ranges_species("Carnegiea gigantea")#saves ranges to the current working directory
-#' shape<-readOGR(dsn = ".",layer = "Carnegiea_gigantea")
-#' #spatialpolygons should be read with readOGR(), see note.
-#' BIEN_ranges_sf(spatialpolygons = shape) 
-#' #Note that this will save many sfs to the working directory.
+#'
+#'saguaro_poly <- OpenRange_load_species("Carnegiea gigantea")
+#'
+#'#Create a temp directory
+#'temp_dir <- file.path(tempdir(), "BIEN_temp")
+#'
+#'#Get range maps for all species with ranges that overlap the saguaro
+# OpenRange_sf(sf = saguaro_poly,
+#             directory = temp_dir)
+#'
+#'#Note that this will save many sfs to the directory (or working directory)
 #' }
 #' @family range functions
 #' @import sf
@@ -348,10 +353,6 @@ OpenRange_sf <- function(sf,
     if(scenario != "present"){
       default_only = F
       }
-    
-    #make sure there are no spaces in the species names
-    species <- gsub(" ","_",species)
-    
 
     if(default_only){
       

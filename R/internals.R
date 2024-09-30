@@ -795,7 +795,7 @@ if(all.taxonomy){
 #'Helper function to check data format.
 #' @keywords internal
 #' @examples \dontrun{
-#' is_char(species)}
+#' .is_char(species)}
 .is_char <- function(x) {
   if (!inherits(x ,c("character","NULL"))) {
     stop(sys.call()[-1]," should be character", call. = FALSE)
