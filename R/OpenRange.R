@@ -232,9 +232,12 @@ OpenRange_species <- function(species,
 #'species_vector <- c("Abies_lasiocarpa","Abies_amabilis")
 #'abies_maps <- OpenRange_load_species(species = species_vector)
 #'
-#'#New functionality
-#'std_all <- OpenRange_load_species(species = "Stellaria debilis", default_only = FALSE) #Includes multiple thresholds
-#'std_default <- OpenRange_load_species(species = "Stellaria debilis", default_only = TRUE) #Only includes one default threshold
+#'# To get all maps for a species, use "default = FALSE".
+#'# Here, this returns maps with different thresholds from the same model
+#'std_all <- OpenRange_load_species(species = "Stellaria debilis", default_only = FALSE)
+#'
+#'#To just get teh default map, use "default = TRUE"
+#'std_default <- OpenRange_load_species(species = "Stellaria debilis", default_only = TRUE) 
 #'
 #'#Plotting files
 #'plot(abies_maps)#plots the spatialpolygons, but doesn't mean much without any reference
@@ -313,9 +316,9 @@ OpenRange_load_species <- function(species, default_only = T, projection = 4326,
 #'#Create a temp directory
 #'temp_dir <- file.path(tempdir(), "BIEN_temp")
 #'
-#'#Get range maps for all species with ranges that overlap the saguaro
-# OpenRange_sf(sf = saguaro_poly,
-#             directory = temp_dir)
+#'#Get range maps for all species with ranges that overlap the range range of saguaros
+#'OpenRange_sf(sf = saguaro_poly,
+#'            directory = temp_dir)
 #'
 #'#Note that this will save many sfs to the directory (or working directory)
 #' }
