@@ -27,9 +27,13 @@ cc_scenarios <- OpenRange_list_scenarios()
 }
 \seealso{
 Other range functions: 
+\code{\link{OpenRange_get_stats}()},
 \code{\link{OpenRange_load_species}()},
 \code{\link{OpenRange_sf}()},
 \code{\link{OpenRange_species}()}
+
+Other metadata functions: 
+\code{\link{OpenRange_get_stats}()}
 }
 \concept{metadata functions}
 \concept{range functions}

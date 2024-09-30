@@ -64,6 +64,7 @@ OpenRange_sf(sf = saguaro_poly,
 }
 \seealso{
 Other range functions: 
+\code{\link{OpenRange_get_stats}()},
 \code{\link{OpenRange_list_scenarios}()},
 \code{\link{OpenRange_load_species}()},
 \code{\link{OpenRange_species}()}

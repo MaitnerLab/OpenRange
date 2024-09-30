@@ -51,6 +51,7 @@ plot(abies_maps[1,], add = T, col ="light green")
 }
 \seealso{
 Other range functions: 
+\code{\link{OpenRange_get_stats}()},
 \code{\link{OpenRange_list_scenarios}()},
 \code{\link{OpenRange_sf}()},
 \code{\link{OpenRange_species}()}
