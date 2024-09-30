@@ -1,0 +1,15 @@
+Package: OpenRange
+Title: Code to Access Open Access Species Range Maps
+Version: 0.0.0.9000
+Authors@R: 
+    person("Brian", "Maitner", , "bmaitner@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "https://orcid.org/0000-0002-2118-9880"))
+    person("Cory", "Merow", , "cory.merow@gmail.com", role = c("aut", "cre"))
+    person("Brad", "Boyle", , "cory.merow@gmail.com", role = c("aut", "cre"))
+    person("Xiao", "Feng", , "cory.merow@gmail.com", role = c("aut", "cre"))
+    person("Brian", "Enquist", , "cory.merow@gmail.com", role = c("aut", "cre"))
+Description: This package is designed to allow access to a proof-of-concept database containing Open Access species range models.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
