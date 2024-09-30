@@ -42,7 +42,7 @@ library(tidyverse)
 
 # Reformat them into a single table
 
-  model_stats_wide <- dplyr::bind_rows(model_stats$rangebagging %>%
+  model_stats_wide <- bind_rows(model_stats$rangebagging %>%
                      mutate(algorithm = "rangebagging"),
                    model_stats$ppm %>%
                      mutate(algorithm = "ppm"),
