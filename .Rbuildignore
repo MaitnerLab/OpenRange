@@ -3,3 +3,4 @@
 ^misc$
 ^LICENSE\.md$
 ^old_builds$
+^man-roxygen$
