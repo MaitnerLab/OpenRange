@@ -3,8 +3,6 @@
 #'Download information on available climate change scenarios
 #'
 #'OpenRange_list_scenarios provides information on climate scenarios with range projections available.
-#' @param user BIEN username
-#' @param password BIEN password
 #' @param ... Additional arguments passed to internal functions.
 #' @note Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
 #' @return Data.frame containing climate change scenarios available in BIEN.
@@ -68,7 +66,6 @@ OpenRange_list_scenarios <- function(...){
 #' Abies_poly$Species#gives the species name associated with "Abies_poly"}
 #' @family range functions
 #' @importFrom sf st_as_sf st_write
-#' @importFrom sp SpatialPolygonsDataFrame
 #' @export
 OpenRange_species <- function(species,
                                     default_only = TRUE,
@@ -79,10 +76,10 @@ OpenRange_species <- function(species,
                                     projection = 4326,
                                     scenario = 'present', ...){
 
-  todoBIEN:::.is_char(species)
-  todoBIEN:::.is_log(matched)
-  todoBIEN:::.is_log(match_names_only)
-  todoBIEN:::.is_char(scenario)
+  .is_char(species)
+  .is_log(matched)
+  .is_log(match_names_only)
+  .is_char(scenario)
   
   
   if(scenario != "present"){default_only = F}
@@ -216,8 +213,6 @@ OpenRange_species <- function(species,
 #' @param scenario Which climate scenario(s) should be represented by maps?  See BIEN_ranges_list_scenarios for options.
 #' @param default_only Logical. Should only default ranges be included? Default is TRUE.
 #' @param ... Additional arguments passed to internal functions.
-#' @param user BIEN username
-#' @param password BIEN password
 #' @return A SpatialPolygonsDataFrame containing range maps for the specified species.
 #' @examples \dontrun{
 #' library(maps)
@@ -237,8 +232,8 @@ OpenRange_species <- function(species,
 #' @export
 OpenRange_load_species <- function(species, default_only = T, projection = 4326, scenario = "present", ...){
   
-  todoBIEN:::.is_char(species)
-  todoBIEN:::.is_char(scenario)
+  .is_char(species)
+  .is_char(scenario)
   
   if(scenario != "present"){default_only = F}
   
@@ -295,8 +290,6 @@ OpenRange_load_species <- function(species, default_only = T, projection = 4326,
 #' @param projection Numeric. What projection should maps be returned in?  4326 (default) or 3857 
 #' @param scenario Which climate scenario should be represented by maps?  See BIEN_ranges_list_scenarios.
 #' @param default_only Logical. Should only default ranges be included? Default is TRUE.
-#' @param user BIEN username
-#' @param password BIEN password
 #' @template ranges_spatial
 #' @return All range maps that intersect the user-supplied shapefile.
 #' @examples \dontrun{
@@ -410,26 +403,13 @@ OpenRange_sf <- function(sf,
       
     }
     
-    # set the query
-    db_name="vegbien"
-    host='vegbiendev.nceas.ucsb.edu'
-    dbname=db_name
+    # execute the query
+    df <- ranges_sql(query = query, limit =10)
     
-    # Name the database type that will be used
-    drv <- DBI::dbDriver('PostgreSQL')
-    # establish connection with database
-    con <- DBI::dbConnect(drv, host=host, dbname=dbname, user=user, password = password)
-    
-    # create query to retrieve
-    #df <- DBI::dbGetQuery(con, statement = query);
-    
-    #DBI::dbDisconnect(con)
-    #rm(con)
-    
-    df <- DBI::dbGetQuery(con, statement = query)
-
     if(length(df)==0){
+      
       message("No species matched")
+      
     }else{
       
       for(l in 1:length(df$species)){
@@ -454,16 +434,10 @@ OpenRange_sf <- function(sf,
         }
         
 
-
-          #Make sure that the directory doesn't have a "/" at the end-this confuses rgdal.  Probably a more eloquent way to do this with regex...
-          if(unlist(strsplit(directory,""))[length(unlist(strsplit(directory,"")))]=="/"){
-            directory<-paste(unlist(strsplit(directory,""))[-length(unlist(strsplit(directory,"")))],collapse = "")
-          }
-          
           if(include.gid==T){
 
             st_write(obj = sp_range,
-                     dsn = directory,
+                     dsn = file.path(directory),
                      layer = paste(df$species[l],"_",df$range_id[l],sep=""),
                      driver = "ESRI Shapefile",
                      append = FALSE,
@@ -473,7 +447,7 @@ OpenRange_sf <- function(sf,
           }else{
 
             st_write(obj = sp_range,
-                     dsn = directory,
+                     dsn = file.path(directory),
                      layer = paste(df$species[l],sep=""),
                      driver = "ESRI Shapefile",
                      append = FALSE,
@@ -486,18 +460,19 @@ OpenRange_sf <- function(sf,
       
       if(return.species.list){
         
-        return(df[,2])  
+        return(df[,2])
+        
       }#if return.species.list  
       
     }#else
     
   }#species names only if statement
   
-  if(species.names.only==TRUE){
+  if(species.names.only == TRUE){
     
     query <- paste("SELECT species
                    FROM ranges.range
-                   WHERE st_intersects(ST_GeographyFromText('SRID=4326;",paste(wkt),"'),geom2)")  
+                   WHERE st_intersects(ST_GeographyFromText('SRID=4326;",paste(wkt),"'),geom2)")
     
     # create query to retrieve
     
