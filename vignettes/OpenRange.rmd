@@ -1,0 +1,31 @@
+---
+title: "OpenRange R package"
+author: "Brian Maitner"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{OpenRange R package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+---
+
+# Open Range
+Open Range is a database containing Open Access species range maps and associated metadata. The database is currently in a pre-alpha, proof-of-concept stage.  While the methods underlying the range maps are documented in the metadata, and the maps follow reasonable best practices, they have not been peer-reviewed.  They are provided to show a working example of what could be done with an Open Access range database, and to provide an example of what the underlying database might look like.  The maps should not be used without critical evaluation.
+
+## Licensing
+The maps currently contained in the Open Range database are available with a CC-BY license, but we note that additional maps using alternative licenses may be applied in the future.
+
+
+# Accessing the maps
+The easiest way to access the species range maps is by querying a species name.
+```{r}
+
+library(OpenRange)
+
+
+pcontorta <- OpenRange_load_species(species = "Pinus contorta")
+
+plot(pcontorta[2])
+
+```
