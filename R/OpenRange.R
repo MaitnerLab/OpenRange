@@ -228,19 +228,20 @@ OpenRange_species <- function(species,
 #' @param ... Additional arguments passed to internal functions.
 #' @return A SpatialPolygonsDataFrame containing range maps for the specified species.
 #' @examples \dontrun{
-#' library(maps)
-#' species_vector<-c("Abies_lasiocarpa","Abies_amabilis")
-#' abies_maps<-BIEN_ranges_load_species_new(species = species_vector)
-#' 
-#' #New functionality
-#' std_all <- BIEN_ranges_load_species_new(species = "Stellaria debilis", default_only = F)
-#' std_default <- BIEN_ranges_load_species_new(species = "Stellaria debilis", default_only = T)
-#' 
-#' #Plotting files
-#' plot(abies_maps)#plots the spatialpolygons, but doesn't mean much without any reference
-#' map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
-#' plot(std_default,col="forest green",add=TRUE) #adds the range of X. strumarium
-#' plot(abies_maps[1,], add = T, col ="light green")}
+#'library(maps)
+#'species_vector <- c("Abies_lasiocarpa","Abies_amabilis")
+#'abies_maps <- OpenRange_load_species(species = species_vector)
+#'
+#'#New functionality
+#'std_all <- OpenRange_load_species(species = "Stellaria debilis", default_only = FALSE) #Includes multiple thresholds
+#'std_default <- OpenRange_load_species(species = "Stellaria debilis", default_only = TRUE) #Only includes one default threshold
+#'
+#'#Plotting files
+#'plot(abies_maps)#plots the spatialpolygons, but doesn't mean much without any reference
+#'map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
+#'plot(std_default,col="forest green",add=TRUE) #adds the range of X. strumarium
+#'plot(abies_maps[1,], add = T, col ="light green")
+#'}
 #' @family range functions
 #' @export
 OpenRange_load_species <- function(species, default_only = T, projection = 4326, scenario = "present", ...){
