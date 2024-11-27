@@ -32,7 +32,7 @@ OpenRange_list_scenarios <- function(...){
 
 #'Download range maps for given species.
 #'
-#'OpenRange_species_new extracts range maps for the specified species.
+#'OpenRange_species extracts range maps for the specified species.
 #' @param species A single species or a vector of species.
 #' @param include_id Logical. Should the range_id be appended to the file name?  Needed to save multiple maps per species.
 #' @param projection Numeric. What projection should maps be returned in?  4326 (default) or 3857 
@@ -119,9 +119,9 @@ OpenRange_species <- function(species,
     
     # set the query
     query <- paste("SELECT range_id,range_name,species_id,species,rangetype_id,source_id,source_name,run_id,run,batch_id,model_id,
-                       model, statistics_unique_id, base_model, mod_type, model_moment, sampling, scenario_id, scenario, 
-                       scenario_filecode, time_period, climate_model, rcp, threshold_id, threshold, background, is_default, 
-                       basename, rel_path, ",st_select," 
+                    model, statistics_unique_id, base_model, mod_type, model_moment, sampling, scenario_id, scenario,
+                    scenario_filecode, time_period, climate_model, rcp, threshold_id, threshold, background, is_default,
+                    basename, rel_path, ",st_select," 
                     FROM ranges.range 
                     WHERE species in (", paste(shQuote(species, type = "sh"),collapse = ', '), ") 
                           AND scenario in (", paste(shQuote(scenario, type = "sh"),collapse = ', '), ")", default_map_select, 
