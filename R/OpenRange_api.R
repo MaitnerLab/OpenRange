@@ -3,12 +3,7 @@
 #'OpenRange_species extracts range maps for the specified species.
 #' @param species A single species or a vector of species.
 #' @param include_id Logical. Should the range_id be appended to the file name?  Needed to save multiple maps per species.
-#' @param projection Numeric. What projection should maps be returned in?  4326 (default) or 3857 
-#' @param scenario Which climate scenario should be represented by maps?  See BIEN_ranges_list_scenarios.
-#' @param default_only Logical. Should only default ranges be included? Default is TRUE.
 #' @param directory Directory that range maps should be saved in.  If none is specified, range maps will be saved in the current working directory.
-#' @param matched Return a list of taxa that were downloaded. Default is TRUE.
-#' @param match_names_only Check for range maps for the taxa specified without downloading range maps. Default is FALSE.
 #' @param ... Additional arguments passed to internal functions.
 #' @note Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
 #' @return Range maps for specified species.
