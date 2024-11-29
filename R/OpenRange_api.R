@@ -1,7 +1,7 @@
 #'Download range maps for given species.
 #'
 #'OpenRange_species extracts range maps for the specified species.
-#' @param species A single species or a vector of species.
+#' @param species A single species.
 #' @param include_id Logical. Should the range_id be appended to the file name?  Needed to save multiple maps per species.
 #' @param directory Directory that range maps should be saved in.  If none is specified, range maps will be saved in the current working directory.
 #' @param ... Additional arguments passed to internal functions.
