@@ -16,7 +16,7 @@ Data.frame containing information on the license associated with the maps.
 OpenRange_get_license provides information on model licenses.
 }
 \examples{
-\dontrun{
+\donttest{
 
 range_license_info <- OpenRange_get_license()
 

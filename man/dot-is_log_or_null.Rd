@@ -10,7 +10,7 @@
 Helper function to check data format.
 }
 \examples{
-\dontrun{
+\donttest{
 is_log_or_null(new.world)}
 }
 \keyword{internal}

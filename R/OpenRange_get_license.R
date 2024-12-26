@@ -3,7 +3,7 @@
 #'OpenRange_get_license provides information on model licenses.
 #' @param ... Additional arguments passed to internal functions.
 #' @return Data.frame containing information on the license associated with the maps.
-#' @examples \dontrun{
+#' @examples \donttest{
 #'
 #' range_license_info <- OpenRange_get_license()
 #'

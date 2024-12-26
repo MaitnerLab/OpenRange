@@ -10,7 +10,7 @@
 Helper function to check data format.
 }
 \examples{
-\dontrun{
+\donttest{
 is_num(min.lat)}
 }
 \keyword{internal}

@@ -27,28 +27,46 @@ Details on the construction of BIEN range maps is available at http://bien.nceas
 \examples{
 \donttest{
 
+library(OpenRange)
 library(maps) #a convenient source of maps
 library(sf)
+library(ggplot2)
+
+
+# Create temp directory
 
 temp_dir <- file.path(tempdir(), "BIEN_temp")
 
 #Download ranges
+
 OpenRange_api_species(species = "Abies_amabilis",
-                 directory = temp_dir)#saves ranges to a temporary directory
+                      directory = temp_dir,
+                      include_id = TRUE)#saves ranges to a temporary directory
 
 #Reading files
 
-Acer_poly <- st_read(dsn = temp_dir,
-                     layer = "Abies_amabilis_117684")
+Abies_poly <- st_read(dsn = temp_dir,
+                      layer = "Abies_amabilis_117684")
+
+# Get a map to plot on
+
+world <- map("world", plot = FALSE, fill = TRUE)|>
+  st_as_sf()
 
 #Plotting files
-plot(Abies_poly[,1])#plots the range, but doesn't mean much without any reference
-map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
-plot(Abies_poly,col="forest green",add=TRUE) #adds the range of Abies lasiocarpa to the map
+
+ggplot(data = world)+
+  geom_sf()+
+  geom_sf(data = Abies_poly,
+          fill="green")+
+  coord_sf(xlim = st_bbox(Abies_poly)[c(1,3)],
+           ylim = st_bbox(Abies_poly)[c(2,4)]) +
+  theme_bw()
 
 #Getting data from the files
+
 Abies_poly |>
- st_drop_geometry()
+  st_drop_geometry()
 
 }
 }

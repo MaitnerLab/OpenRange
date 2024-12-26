@@ -16,7 +16,7 @@ List object containing one data.frame for each of the three modelling frameworks
 OpenRange_get_stats provides information on model performance.
 }
 \examples{
-\dontrun{
+\donttest{
 
 range_stats <- OpenRange_get_stats()
 
