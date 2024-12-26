@@ -6,8 +6,8 @@
 \usage{
 OpenRange_species(
   species,
-  default_only = TRUE,
   directory = NULL,
+  default_only = TRUE,
   matched = TRUE,
   match_names_only = FALSE,
   include_id = TRUE,
@@ -19,9 +19,9 @@ OpenRange_species(
 \arguments{
 \item{species}{A single species or a vector of species.}
 
-\item{default_only}{Logical. Should only default ranges be included? Default is TRUE.}
-
 \item{directory}{Directory that range maps should be saved in.  If none is specified, range maps will be saved in the current working directory.}
+
+\item{default_only}{Logical. Should only default ranges be included? Default is TRUE.}
 
 \item{matched}{Return a list of taxa that were downloaded. Default is TRUE.}
 
@@ -60,8 +60,6 @@ temp_dir <- file.path(tempdir(), "BIEN_temp")
 #Download ranges
 OpenRange_species(species = species_vector,
                  directory = temp_dir)#saves ranges to a temporary directory
-
-OpenRange_species("Abies_lasiocarpa",temp_dir)
 
 #Reading files
 

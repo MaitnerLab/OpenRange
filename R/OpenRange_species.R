@@ -28,8 +28,9 @@
 #'OpenRange_species(species = species_vector,
 #'                  directory = temp_dir)#saves ranges to a temporary directory
 #'
-#'OpenRange_species("Abies_lasiocarpa",temp_dir)
-#'
+# OpenRange_species(species = "Abies_lasiocarpa",
+#                   directory = temp_dir)
+# 
 #'#Reading files
 #'
 #'Abies_poly <- st_read(dsn = temp_dir,
@@ -49,8 +50,8 @@
 #' @importFrom sf st_as_sf st_write
 #' @export
 OpenRange_species <- function(species,
-                              default_only = TRUE,
                               directory = NULL,
+                              default_only = TRUE,
                               matched = TRUE,
                               match_names_only = FALSE,
                               include_id = TRUE,
