@@ -4,7 +4,6 @@ test_that("scenarios returns df", {
   
     scenarios <- OpenRange_list_scenarios()
 
-  # test below assume a data dictionary and will be skipped if one isn't returned
   expect_s3_class(object = scenarios,class = "data.frame") 
     
 })

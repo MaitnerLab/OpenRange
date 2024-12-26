@@ -1,15 +1,16 @@
-#'Download range maps for given species.
+#'Download range maps for given species using the API.
 #'
-#'OpenRange_species extracts range maps for the specified species.
+#'OpenRange_api_species extracts range maps for the specified species.
 #' @param species A single species.
 #' @param include_id Logical. Should the range_id be appended to the file name?  Needed to save multiple maps per species.
 #' @param directory Directory that range maps should be saved in.  If none is specified, range maps will be saved in the current working directory.
 #' @param ... Additional arguments passed to internal functions.
 #' @note Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
 #' @return Range maps for specified species.
-#' @examples \dontrun{
+#' @examples \donttest{
 #' 
 #'library(maps) #a convenient source of maps
+#'library(sf)
 #'
 #'temp_dir <- file.path(tempdir(), "BIEN_temp")
 #'
@@ -28,7 +29,7 @@
 #'plot(Abies_poly,col="forest green",add=TRUE) #adds the range of Abies lasiocarpa to the map
 #'
 #'#Getting data from the files
-#'Abies_poly %>%
+#'Abies_poly |>
 #'  st_drop_geometry()
 #'
 #' }

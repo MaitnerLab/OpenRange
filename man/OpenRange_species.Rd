@@ -81,6 +81,7 @@ Abies_poly \%>\%
 }
 \seealso{
 Other range functions: 
+\code{\link{OpenRange_api_load_species}()},
 \code{\link{OpenRange_api_species}()},
 \code{\link{OpenRange_get_license}()},
 \code{\link{OpenRange_get_stats}()},
