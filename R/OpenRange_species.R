@@ -28,7 +28,7 @@
 #'OpenRange_species(species = species_vector,
 #'                  directory = temp_dir)#saves ranges to a temporary directory
 #'
-#'OpenRanges_species("Abies_lasiocarpa",temp_dir)
+#'OpenRange_species("Abies_lasiocarpa",temp_dir)
 #'
 #'#Reading files
 #'

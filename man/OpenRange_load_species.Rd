@@ -31,22 +31,39 @@ OpenRange_load_species returns spatial data for the specified species.
 }
 \examples{
 \donttest{
+#' 
 library(maps)
+library(ggplot2)
+library(sf)
+
 species_vector <- c("Abies_lasiocarpa","Abies_amabilis")
 abies_maps <- OpenRange_load_species(species = species_vector)
 
 # To get all maps for a species, use "default = FALSE".
 # Here, this returns maps with different thresholds from the same model
-std_all <- OpenRange_load_species(species = "Stellaria debilis", default_only = FALSE)
+std_all <- OpenRange_load_species(species = "Stellaria debilis",
+                                  default_only = FALSE)
 
-#To just get teh default map, use "default = TRUE"
-std_default <- OpenRange_load_species(species = "Stellaria debilis", default_only = TRUE) 
+#To just get the default map, use "default = TRUE"
+std_default <- OpenRange_load_species(species = "Stellaria debilis",
+                                      default_only = TRUE)
 
-#Plotting files
-plot(abies_maps)#plots the spatialpolygons, but doesn't mean much without any reference
-map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
-plot(std_default,col="forest green",add=TRUE) #adds the range of X. strumarium
-plot(abies_maps[1,], add = T, col ="light green")
+#get world map
+
+world <- map("world", plot = FALSE, fill = TRUE)|>
+  st_as_sf()
+
+#Plotting ranges
+
+ggplot(data = world)+
+  geom_sf()+
+  geom_sf(data = abies_maps,
+          mapping = aes(fill = species),
+          alpha=0.5)+
+  coord_sf(xlim = st_bbox(abies_maps)[c(1,3)],
+           ylim = st_bbox(abies_maps)[c(2,4)]) +
+  theme_bw()
+
 }
 }
 \seealso{
