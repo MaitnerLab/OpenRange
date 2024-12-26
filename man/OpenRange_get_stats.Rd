@@ -24,6 +24,7 @@ range_stats <- OpenRange_get_stats()
 }
 \seealso{
 Other range functions: 
+\code{\link{OpenRange_api_species}()},
 \code{\link{OpenRange_get_license}()},
 \code{\link{OpenRange_list_scenarios}()},
 \code{\link{OpenRange_load_species}()},
