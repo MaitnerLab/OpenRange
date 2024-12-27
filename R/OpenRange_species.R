@@ -15,6 +15,7 @@
 #' @examples \donttest{
 #' 
 #'library(maps) #a convenient source of maps
+#'library(sf)
 #'
 #'species_vector <- c("Abies_lasiocarpa","Abies_amabilis")
 #'
@@ -42,7 +43,7 @@
 #'plot(Abies_poly,col="forest green",add=TRUE) #adds the range of Abies lasiocarpa to the map
 #'
 #'#Getting data from the files
-#'Abies_poly %>%
+#'Abies_poly |>
 #'  st_drop_geometry()
 #'
 #' }

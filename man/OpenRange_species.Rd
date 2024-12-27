@@ -48,6 +48,7 @@ Details on the construction of BIEN range maps is available at http://bien.nceas
 \donttest{
 
 library(maps) #a convenient source of maps
+library(sf)
 
 species_vector <- c("Abies_lasiocarpa","Abies_amabilis")
 
@@ -72,7 +73,7 @@ map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in
 plot(Abies_poly,col="forest green",add=TRUE) #adds the range of Abies lasiocarpa to the map
 
 #Getting data from the files
-Abies_poly \%>\%
+Abies_poly |>
  st_drop_geometry()
 
 }

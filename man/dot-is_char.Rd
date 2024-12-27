@@ -10,7 +10,7 @@
 Helper function to check data format.
 }
 \examples{
-\donttest{
+\dontrun{
 .is_char(species)}
 }
 \keyword{internal}
