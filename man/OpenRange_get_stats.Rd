@@ -10,7 +10,7 @@ OpenRange_get_stats(...)
 \item{...}{Additional arguments passed to internal functions.}
 }
 \value{
-List object containing one data.frame for each of the three modelling frameworks.
+List object containing one data.frame for each of the three modeling frameworks.
 }
 \description{
 OpenRange_get_stats provides information on model performance.
