@@ -4,3 +4,7 @@
 ^LICENSE\.md$
 ^old_builds$
 ^man-roxygen$
+^cran-comments\.md$
+.git
+.github
+^CRAN-SUBMISSION$
