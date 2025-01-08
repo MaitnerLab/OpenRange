@@ -12,7 +12,7 @@ Authors@R:
     role = c("aut")),
     person("Brian", "Enquist", , "benquist@arizona.edu", role = c("aut"))
     )
-Description: This package is designed to allow access to a proof-of-concept database containing Open Access species range models.
+Description: Allows access to a proof-of-concept database containing Open Access species range models and relevant metadata. Access to the database is via both SQL connection and API, allowing diverse use-cases.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
