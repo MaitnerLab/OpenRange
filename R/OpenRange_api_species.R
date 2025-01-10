@@ -1,12 +1,12 @@
 #'Download range maps for given species using the API.
 #'
-#'OpenRange_api_species extracts range maps for the specified species.
+#'OpenRange_api_species downloads range maps for the specified species.
 #' @param species A single species.
 #' @param include_id Logical. Should the range_id be appended to the file name?  Needed to save multiple maps per species.
-#' @param directory Directory that range maps should be saved in.  If none is specified, range maps will be saved in the current working directory.
+#' @param directory Directory that range maps should be saved in.
 #' @param ... Additional arguments passed to internal functions.
 #' @note Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
-#' @return Range maps for specified species.
+#' @return NULL. Called for its side effect of downloading range maps.
 #' @examples \donttest{
 #'
 #' library(OpenRange)
@@ -23,7 +23,7 @@
 #' 
 #' OpenRange_api_species(species = "Abies_amabilis",
 #'                       directory = temp_dir,
-#'                       include_id = TRUE)#saves ranges to a temporary directory
+#'                       include_id = TRUE) # saves ranges to a temporary directory
 #' 
 #' #Reading files
 #' 
@@ -57,7 +57,7 @@
 #' @importFrom jsonlite fromJSON
 #' @export
 OpenRange_api_species <- function(species,
-                              directory = NULL,
+                              directory,
                               include_id = TRUE,
                               ...){
   
@@ -71,13 +71,6 @@ OpenRange_api_species <- function(species,
   #make sure there are no spaces in the species names
     species <- gsub(" ","_",species)
     
-  #record original working directory,change to specified directory if given
-    
-    if(is.null(directory)){
-      directory <- getwd()
-    }
-    
-  
   #make the URL
     url <- paste0("https://biendata.org/api/range/range-data?species=",species)
   

@@ -6,7 +6,7 @@
 #' @param projection Numeric. What projection should maps be returned in?  4326 (default) or 3857 
 #' @param scenario Which climate scenario should be represented by maps?  See BIEN_ranges_list_scenarios.
 #' @param default_only Logical. Should only default ranges be included? Default is TRUE.
-#' @param directory Directory that range maps should be saved in.  If none is specified, range maps will be saved in the current working directory.
+#' @param directory Directory that range maps should be saved in.
 #' @param matched Return a list of taxa that were downloaded. Default is TRUE.
 #' @param match_names_only Check for range maps for the taxa specified without downloading range maps. Default is FALSE.
 #' @param ... Additional arguments passed to internal functions.
@@ -51,7 +51,7 @@
 #' @importFrom sf st_as_sf st_write
 #' @export
 OpenRange_species <- function(species,
-                              directory = NULL,
+                              directory,
                               default_only = TRUE,
                               matched = TRUE,
                               match_names_only = FALSE,
@@ -71,11 +71,6 @@ OpenRange_species <- function(species,
   species <- gsub(" ","_",species)
   
   if(match_names_only==FALSE){
-    
-    #record original working directory,change to specified directory if given
-    if(is.null(directory)){
-      directory <- getwd()
-    }
     
     if(projection==4326){st_select<-"ST_AsText(geom2)"}
     if(projection==3857){st_select<-"ST_AsText(geom)"}

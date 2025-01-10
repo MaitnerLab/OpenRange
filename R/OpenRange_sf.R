@@ -25,7 +25,7 @@
 #' @import sf
 #' @export
 OpenRange_sf <- function(sf,
-                         directory = NULL,
+                         directory,
                          species.names.only = FALSE,
                          return.species.list = TRUE,
                          crop.ranges = FALSE,
@@ -46,11 +46,6 @@ OpenRange_sf <- function(sf,
   
   
   if(species.names.only == FALSE){
-    
-    #set directory for saving
-    if(is.null(directory)){
-      directory <- getwd()
-    }  
     
     if(scenario != "present"){
       default_only = F
