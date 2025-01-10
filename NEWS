@@ -1,0 +1,12 @@
+===============
+# OpenRange 0.0.1
+===============
+
+## NEW FEATURES
+
+* Initial development
+
+## Bug fixes
+
+* Replaced "T" with "TRUE" in OpenRange_load_species, per CRAN comments
+* Removed examples for non-exported function, per CRAN comments.

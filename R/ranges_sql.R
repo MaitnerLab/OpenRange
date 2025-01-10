@@ -15,10 +15,6 @@
 #' @return A dataframe returned by the query.
 #' @keywords internal
 #' @import RPostgreSQL
-#' @examples \dontrun{
-#' ranges_sql("SELECT DISTINCT  scenario_id, scenario,
-#' scenario_filecode, time_period, climate_model, rcp
-#' FROM ranges.range ;")}
 ranges_sql <- function(query,
                     user = 'public_bien',
                     password = 'bien_public',

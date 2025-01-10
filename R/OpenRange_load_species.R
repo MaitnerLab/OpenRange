@@ -44,7 +44,11 @@
 #'}
 #' @family range functions
 #' @export
-OpenRange_load_species <- function(species, default_only = T, projection = 4326, scenario = "present", ...){
+OpenRange_load_species <- function(species,
+                                   default_only = TRUE,
+                                   projection = 4326,
+                                   scenario = "present",
+                                   ...){
   
   .is_char(species)
   .is_char(scenario)
