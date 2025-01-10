@@ -14,3 +14,8 @@
 * This is a new release.
 
 ## Notes
+* Replaced "T" with "TRUE" in OpenRange_load_species, per CRAN comments.
+* Removed examples for non-exported function, per CRAN comments.
+* Placed PostgreSQL in single quotes in the description, per CRAN comments.
+* Added a web link to API documentation to the description, per CRAN comments.
+* Removed default directories, per CRAN comments.
