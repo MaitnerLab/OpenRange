@@ -1,6 +1,6 @@
 # Open Range
 
-The goal of this repository is to provide access to a proof-of-concept Open Range database. The intent behind this Open Range databse is to provide Open Access species range maps, along with associated metadata needed to judge map quality and suitability for different purposes. The maps within the database are licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> license. The current database is focused on plants, primarily from the Americas, but we intend on expanding the scope in the future.
+The goal of this repository is to provide access to a proof-of-concept Open Range database. The intent behind this Open Range database is to provide Open Access species range maps, along with associated metadata needed to judge map quality and suitability for different purposes. The maps within the database are licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> license. The current database is focused on plants, primarily from the Americas, but we intend on expanding the scope in the future.
 
 ## Disclaimer
 
