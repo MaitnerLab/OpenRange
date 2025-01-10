@@ -4,22 +4,22 @@
 \alias{OpenRange_api_species}
 \title{Download range maps for given species using the API.}
 \usage{
-OpenRange_api_species(species, directory = NULL, include_id = TRUE, ...)
+OpenRange_api_species(species, directory, include_id = TRUE, ...)
 }
 \arguments{
 \item{species}{A single species.}
 
-\item{directory}{Directory that range maps should be saved in.  If none is specified, range maps will be saved in the current working directory.}
+\item{directory}{Directory that range maps should be saved in.}
 
 \item{include_id}{Logical. Should the range_id be appended to the file name?  Needed to save multiple maps per species.}
 
 \item{...}{Additional arguments passed to internal functions.}
 }
 \value{
-Range maps for specified species.
+NULL. Called for its side effect of downloading range maps.
 }
 \description{
-OpenRange_api_species extracts range maps for the specified species.
+OpenRange_api_species downloads range maps for the specified species.
 }
 \note{
 Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
@@ -41,7 +41,7 @@ temp_dir <- file.path(tempdir(), "BIEN_temp")
 
 OpenRange_api_species(species = "Abies_amabilis",
                       directory = temp_dir,
-                      include_id = TRUE)#saves ranges to a temporary directory
+                      include_id = TRUE) # saves ranges to a temporary directory
 
 #Reading files
 

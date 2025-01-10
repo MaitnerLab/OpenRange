@@ -9,8 +9,4 @@
 \description{
 Helper function to check data format.
 }
-\examples{
-\dontrun{
-is_num(min.lat)}
-}
 \keyword{internal}

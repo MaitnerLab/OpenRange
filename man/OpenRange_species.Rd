@@ -6,7 +6,7 @@
 \usage{
 OpenRange_species(
   species,
-  directory = NULL,
+  directory,
   default_only = TRUE,
   matched = TRUE,
   match_names_only = FALSE,
@@ -19,7 +19,7 @@ OpenRange_species(
 \arguments{
 \item{species}{A single species or a vector of species.}
 
-\item{directory}{Directory that range maps should be saved in.  If none is specified, range maps will be saved in the current working directory.}
+\item{directory}{Directory that range maps should be saved in.}
 
 \item{default_only}{Logical. Should only default ranges be included? Default is TRUE.}
 

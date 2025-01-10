@@ -41,10 +41,4 @@ A dataframe returned by the query.
 \description{
 ranges_sql is an internal function used to submit SQL queries.
 }
-\examples{
-\dontrun{
-ranges_sql("SELECT DISTINCT  scenario_id, scenario,
-scenario_filecode, time_period, climate_model, rcp
-FROM ranges.range ;")}
-}
 \keyword{internal}

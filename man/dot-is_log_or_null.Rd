@@ -9,8 +9,4 @@
 \description{
 Helper function to check data format.
 }
-\examples{
-\dontrun{
-is_log_or_null(new.world)}
-}
 \keyword{internal}

@@ -6,7 +6,7 @@
 \usage{
 OpenRange_sf(
   sf,
-  directory = NULL,
+  directory,
   species.names.only = FALSE,
   return.species.list = TRUE,
   crop.ranges = FALSE,
@@ -20,7 +20,7 @@ OpenRange_sf(
 \arguments{
 \item{sf}{An object of class sf}
 
-\item{directory}{Directory that range maps should be saved in.  If none is specified, range maps will be saved in the current working directory.}
+\item{directory}{Directory that range maps should be saved in.}
 
 \item{species.names.only}{Return species names rather than spatial data? Default is FALSE.}
 

@@ -6,7 +6,7 @@
 \usage{
 OpenRange_load_species(
   species,
-  default_only = T,
+  default_only = TRUE,
   projection = 4326,
   scenario = "present",
   ...
