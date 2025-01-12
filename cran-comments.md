@@ -19,3 +19,4 @@
 * Placed PostgreSQL in single quotes in the description, per CRAN comments.
 * Added a web link to API documentation to the description, per CRAN comments.
 * Removed default directories, per CRAN comments.
+* Modified web link in description, per CRAN comments.

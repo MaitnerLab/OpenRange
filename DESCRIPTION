@@ -12,7 +12,7 @@ Authors@R:
     role = c("aut")),
     person("Brian", "Enquist", , "benquist@arizona.edu", role = c("aut"))
     )
-Description: Allows access to a proof-of-concept database containing Open Access species range models and relevant metadata. Access to the database is via both 'PostgreSQL' connection and API<[https://github.com/EnquistLab/Biendata-Frontend]https://github.com/EnquistLab/Biendata-Frontend>, allowing diverse use-cases.
+Description: Allows access to a proof-of-concept database containing Open Access species range models and relevant metadata. Access to the database is via both 'PostgreSQL' connection and API <https://github.com/EnquistLab/Biendata-Frontend>, allowing diverse use-cases.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
