@@ -64,8 +64,9 @@ OpenRange_species <- function(species,
   .is_log(match_names_only)
   .is_char(scenario)
   
-  
-  if(scenario != "present"){default_only = F}
+  if(length(scenario)==1){
+    if(scenario != "present"){default_only <- FALSE}
+  }else{default_only <- FALSE}
   
   #make sure there are no spaces in the species names
   species <- gsub(" ","_",species)
