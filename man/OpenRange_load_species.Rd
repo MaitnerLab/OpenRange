@@ -19,7 +19,7 @@ OpenRange_load_species(
 
 \item{projection}{Numeric. What projection should maps be returned in?  4326 (default) or 3857}
 
-\item{scenario}{Which climate scenario(s) should be represented by maps?  See BIEN_ranges_list_scenarios for options.}
+\item{scenario}{Which climate scenario(s) should be represented by maps?  See BIEN_ranges_list_scenarios for options. Set to NULL to download all.}
 
 \item{...}{Additional arguments passed to internal functions.}
 }

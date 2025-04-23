@@ -3,7 +3,7 @@
 #'OpenRange_load_species returns spatial data for the specified species.
 #' @param species A single species or a vector of species.
 #' @param projection Numeric. What projection should maps be returned in?  4326 (default) or 3857 
-#' @param scenario Which climate scenario(s) should be represented by maps?  See BIEN_ranges_list_scenarios for options.
+#' @param scenario Which climate scenario(s) should be represented by maps?  See BIEN_ranges_list_scenarios for options. Set to NULL to download all.
 #' @param default_only Logical. Should only default ranges be included? Default is TRUE.
 #' @param ... Additional arguments passed to internal functions.
 #' @return A SpatialPolygonsDataFrame containing range maps for the specified species.
@@ -73,6 +73,19 @@ OpenRange_load_species <- function(species,
     default_map_select <- ""
   }
   
+  #If scenario is NULL, download ignore it and grab all
+  
+    if(!is.null(scenario)){
+      
+      scenario_select <- paste("AND scenario in (", paste(shQuote(scenario, type = "sh"),collapse = ', '), ")")
+      
+    }else{
+      
+      scenario_select <- ""
+    }
+  
+  
+  
   
   # set the query
   query <- paste("SELECT range_id,range_name,species_id,species,rangetype_id,source_id,source_name,run_id,run,batch_id,model_id,
@@ -80,8 +93,8 @@ OpenRange_load_species <- function(species,
                        scenario_filecode, time_period, climate_model, rcp, threshold_id, threshold, background, is_default, 
                        basename, rel_path, ",st_select," 
                     FROM ranges.range 
-                    WHERE species in (", paste(shQuote(species, type = "sh"),collapse = ', '), ") 
-                          AND scenario in (", paste(shQuote(scenario, type = "sh"),collapse = ', '), ")", default_map_select, 
+                    WHERE species in (", paste(shQuote(species, type = "sh"),collapse = ', '), ")",
+                  scenario_select, default_map_select, 
                  "ORDER BY species ;")
   
   
