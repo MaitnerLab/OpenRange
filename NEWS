@@ -6,6 +6,8 @@
 * Updates to allow downloading multiple scenarios
 
 ## Bug fixes
+* Declared a dependency on R (>= 4.1.0) in DESCRIPTION, per CRAN comments, since
+  the package uses the native pipe (|>).
 
 
 ===============
