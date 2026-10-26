@@ -1,8 +1,13 @@
 test_that("OpenRange_get_stats returns list", {
   
+  skip_on_cran()
   skip_if_offline(host = "r-project.org")
   
   stats <- OpenRange_get_stats()
+  
+  # OpenRange_get_stats returns NULL if the database is unavailable
+  skip_if(is.null(stats),
+          message = "The OpenRange database is not available.")
   
   # check for a list
   expect_identical(object = class(stats),expected = "list")

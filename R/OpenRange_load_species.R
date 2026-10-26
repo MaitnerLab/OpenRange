@@ -6,7 +6,10 @@
 #' @param scenario Which climate scenario(s) should be represented by maps?  See BIEN_ranges_list_scenarios for options. Set to NULL to download all.
 #' @param default_only Logical. Should only default ranges be included? Default is TRUE.
 #' @param ... Additional arguments passed to internal functions.
-#' @return A SpatialPolygonsDataFrame containing range maps for the specified species.
+#' @note This function relies on an Internet resource.  If that resource is
+#'   unavailable, NULL will be returned along with an informative message.
+#' @return An sf object containing range maps for the specified species, or NULL
+#'   if the database is unavailable or no maps are found.
 #' @examples \donttest{
 #' #' 
 #' library(maps)
@@ -16,30 +19,37 @@
 #' species_vector <- c("Abies_lasiocarpa","Abies_amabilis")
 #' abies_maps <- OpenRange_load_species(species = species_vector)
 #' 
-#' # To get all maps for a species, use "default = FALSE".
-#' # Here, this returns maps with different thresholds from the same model
-#' std_all <- OpenRange_load_species(species = "Stellaria debilis",
-#'                                   default_only = FALSE)
+#' # OpenRange functions return NULL if the data source is unavailable,
+#' # so check the output before using it.
 #' 
-#' #To just get the default map, use "default = TRUE"
-#' std_default <- OpenRange_load_species(species = "Stellaria debilis",
-#'                                       default_only = TRUE)
+#' if(!is.null(abies_maps)){
 #' 
-#' #get world map
+#'   # To get all maps for a species, use "default = FALSE".
+#'   # Here, this returns maps with different thresholds from the same model
+#'   std_all <- OpenRange_load_species(species = "Stellaria debilis",
+#'                                     default_only = FALSE)
 #' 
-#' world <- map("world", plot = FALSE, fill = TRUE)|>
-#'   st_as_sf()
+#'   #To just get the default map, use "default = TRUE"
+#'   std_default <- OpenRange_load_species(species = "Stellaria debilis",
+#'                                         default_only = TRUE)
 #' 
-#' #Plotting ranges
+#'   #get world map
 #' 
-#' ggplot(data = world)+
-#'   geom_sf()+
-#'   geom_sf(data = abies_maps,
-#'           mapping = aes(fill = species),
-#'           alpha=0.5)+
-#'   coord_sf(xlim = st_bbox(abies_maps)[c(1,3)],
-#'            ylim = st_bbox(abies_maps)[c(2,4)]) +
-#'   theme_bw()
+#'   world <- map("world", plot = FALSE, fill = TRUE)|>
+#'     st_as_sf()
+#' 
+#'   #Plotting ranges
+#' 
+#'   ggplot(data = world)+
+#'     geom_sf()+
+#'     geom_sf(data = abies_maps,
+#'             mapping = aes(fill = species),
+#'             alpha=0.5)+
+#'     coord_sf(xlim = st_bbox(abies_maps)[c(1,3)],
+#'              ylim = st_bbox(abies_maps)[c(2,4)]) +
+#'     theme_bw()
+#' 
+#' }
 #' 
 #'}
 #' @family range functions
@@ -98,19 +108,22 @@ OpenRange_load_species <- function(species,
                  "ORDER BY species ;")
   
   
+  # Returns NULL (with a message) if the database is unavailable.
   df <- ranges_sql(query)
   
-  if(length(df)==0){
+  if(is.null(df)){return(invisible(NULL))}
+  
+  if(length(df)==0 || nrow(df)==0){
+    
     message("No species matched")
-  }else{
+    return(invisible(NULL))
     
-    
-    poly <- st_as_sf(x = df,
-                     wkt = "st_astext",
-                     crs = "epsg:4326")
-    
-    
-  }#else
+  }
+  
+  poly <- .as_sf(df = df,
+                 crs = "epsg:4326")
+  
+  if(is.null(poly)){return(invisible(NULL))}
   
   return(poly) 
   

@@ -39,27 +39,38 @@ OpenRange_sf(
 \item{...}{Additional arguments passed to internal functions.}
 }
 \value{
-All range maps that intersect the user-supplied shapefile.
+All range maps that intersect the user-supplied shapefile, or NULL if
+the database is unavailable.
 }
 \description{
 OpenRange_sf extracts range maps that intersect a specified SpatialPolygons or SpatialPolygonsDataFrame object.
 }
 \note{
 Details on the construction of BIEN range maps is available at https://bien.nceas.ucsb.edu/bien/biendata/bien-3/
+
+This function relies on an Internet resource.  If that resource is
+unavailable, NULL will be returned along with an informative message.
 }
 \examples{
 \donttest{
 
 saguaro_poly <- OpenRange_load_species("Carnegiea gigantea")
 
-#Create a temp directory
-temp_dir <- file.path(tempdir(), "BIEN_temp")
+# OpenRange functions return NULL if the data source is unavailable,
+# so check the output before using it.
 
-#Get range maps for all species with ranges that overlap the range range of saguaros
-OpenRange_sf(sf = saguaro_poly,
-           directory = temp_dir)
+if(!is.null(saguaro_poly)){
 
-#Note that this will save many sfs to the directory (or working directory)
+ #Create a temp directory
+ temp_dir <- file.path(tempdir(), "BIEN_temp")
+
+ #Get range maps for all species with ranges that overlap the range of saguaros
+ OpenRange_sf(sf = saguaro_poly,
+              directory = temp_dir)
+
+ #Note that this will save many sfs to the directory (or working directory)
+
+}
 }
 }
 \seealso{

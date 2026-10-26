@@ -36,7 +36,8 @@ ranges_sql(
 \item{print.query}{Should  the query used be printed?  Default is FALSE}
 }
 \value{
-A dataframe returned by the query.
+A dataframe returned by the query, or NULL (with an informative
+message) if the database cannot be reached.
 }
 \description{
 ranges_sql is an internal function used to submit SQL queries.

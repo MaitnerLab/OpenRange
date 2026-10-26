@@ -10,13 +10,17 @@ OpenRange_list_scenarios(...)
 \item{...}{Additional arguments passed to internal functions.}
 }
 \value{
-Data.frame containing climate change scenarios available in BIEN.
+Data.frame containing climate change scenarios available in BIEN, or
+NULL if the database is unavailable.
 }
 \description{
 OpenRange_list_scenarios provides information on climate scenarios with range projections available.
 }
 \note{
 Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
+
+This function relies on an Internet resource.  If that resource is
+unavailable, NULL will be returned along with an informative message.
 }
 \examples{
 \dontrun{

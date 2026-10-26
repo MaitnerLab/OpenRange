@@ -12,7 +12,8 @@
 #' @param schema An alternative schema to be accessed.  Used for testing purposes.
 #' @param db_name An alternate database to be used rather than the default, vegbien.
 #' @param print.query Should  the query used be printed?  Default is FALSE
-#' @return A dataframe returned by the query.
+#' @return A dataframe returned by the query, or NULL (with an informative
+#'   message) if the database cannot be reached.
 #' @keywords internal
 #' @import RPostgreSQL
 ranges_sql <- function(query,
@@ -27,51 +28,71 @@ ranges_sql <- function(query,
 
   # user <- 'public_bien'
   # password <- 'bien_public'
-  
+
   # .is_char(query)
   # .is_char(user)
   # .is_char(password)
-  
+
   if(print.query){
     query <- gsub(pattern = "\n",replacement = "",query)
     query <- gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", query, perl=TRUE)
     print(query)
   }
-  
+
   if(!is.null(ranges)){
     query<-gsub(pattern = "ranges",replacement = ranges,x = query)}
-  
+
   if(!is.null(limit)){
     query<-gsub(pattern = " ;",replacement = paste(" LIMIT ",limit,";"),x = query)}
-  
+
   if(return.query){
     query<-gsub(pattern = "\n",replacement = "",query)
     query<-gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", query, perl=TRUE)
     return(query)
   }
-  
-  
+
+
   host='vegbiendev.nceas.ucsb.edu'
   dbname= db_name
   user=user
   password=password
   # Name the database type that will be used
   drv <- DBI::dbDriver('PostgreSQL')
-  # establish connection with database
-  con <- DBI::dbConnect(drv, host=host, dbname=dbname, user=user, password = password)
-  
-  
+
+  # establish connection with database.
+  # The database is an Internet resource that may be unavailable, overloaded, or
+  # may have changed.  Rather than throwing an error, return NULL along with an
+  # informative message so that calling code can fail gracefully.
+
+  con <- tryCatch(expr = DBI::dbConnect(drv,
+                                        host = host,
+                                        dbname = dbname,
+                                        user = user,
+                                        password = password),
+                  error = function(e){.resource_unavailable(resource = paste0("OpenRange database (", host, ")"),
+                                                            details = conditionMessage(e))},
+                  warning = function(w){.resource_unavailable(resource = paste0("OpenRange database (", host, ")"),
+                                                              details = conditionMessage(w))})
+
+  if(is.null(con)){return(invisible(NULL))}
+
+  on.exit(expr = try(expr = DBI::dbDisconnect(con), silent = TRUE),
+          add = TRUE)
+
+
   # create query to retrieve
-  df <- DBI::dbGetQuery(con, statement = query);
-  
-  DBI::dbDisconnect(con)
-  
+  df <- tryCatch(expr = DBI::dbGetQuery(con, statement = query),
+                 error = function(e){.resource_unavailable(resource = paste0("OpenRange database (", host, ")"),
+                                                           details = conditionMessage(e))})
+
+  if(is.null(df)){return(invisible(NULL))}
+
   if(print.query){
     query<-gsub(pattern = "\n",replacement = "",query)
     query<-gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", query, perl=TRUE)
     print(query)
   }
-  
+
   return(df)
-  
+
 }

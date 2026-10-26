@@ -10,3 +10,4 @@
 ^CRAN-SUBMISSION$
 ^\.positai$
 ^\.claude$
+^OpenRange_.*\.tar\.gz$

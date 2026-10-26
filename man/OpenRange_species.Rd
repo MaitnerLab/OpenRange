@@ -36,13 +36,17 @@ OpenRange_species(
 \item{...}{Additional arguments passed to internal functions.}
 }
 \value{
-Range maps for specified species.
+Range maps for specified species, or NULL if the database is
+unavailable.
 }
 \description{
 OpenRange_species extracts range maps for the specified species.
 }
 \note{
 Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
+
+This function relies on an Internet resource.  If that resource is
+unavailable, NULL will be returned along with an informative message.
 }
 \examples{
 \donttest{
@@ -62,19 +66,26 @@ temp_dir <- file.path(tempdir(), "BIEN_temp")
 OpenRange_species(species = species_vector,
                  directory = temp_dir)#saves ranges to a temporary directory
 
-#Reading files
+# Nothing is saved if the data source is unavailable, so check that the
+# file exists before using it.
 
-Abies_poly <- st_read(dsn = temp_dir,
-                     layer = "Abies_amabilis_117684")
+if(file.exists(file.path(temp_dir, "Abies_amabilis_117684.shp"))){
 
-#Plotting files
-plot(Abies_poly[,1])#plots the range, but doesn't mean much without any reference
-map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
-plot(Abies_poly,col="forest green",add=TRUE) #adds the range of Abies lasiocarpa to the map
+ #Reading files
 
-#Getting data from the files
-Abies_poly |>
- st_drop_geometry()
+ Abies_poly <- st_read(dsn = temp_dir,
+                       layer = "Abies_amabilis_117684")
+
+ #Plotting files
+ plot(Abies_poly[,1])#plots the range, but doesn't mean much without any reference
+ map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
+ plot(Abies_poly,col="forest green",add=TRUE) #adds the range of Abies lasiocarpa to the map
+
+ #Getting data from the files
+ Abies_poly |>
+   st_drop_geometry()
+
+}
 
 }
 }

@@ -12,13 +12,17 @@ OpenRange_api_load_species(species, ...)
 \item{...}{Additional arguments passed to internal functions.}
 }
 \value{
-Range maps for specified species.
+Range maps for specified species, or NULL if the API is unavailable
+or no maps are found.
 }
 \description{
 OpenRange_api_load_species extracts range maps for the specified species.
 }
 \note{
 Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
+
+This function relies on an Internet resource.  If that resource is
+unavailable, NULL will be returned along with an informative message.
 }
 \examples{
 \donttest{
@@ -31,14 +35,21 @@ temp_dir <- file.path(tempdir(), "BIEN_temp")
 #Download ranges
 Abies_poly <- OpenRange_api_load_species(species = "Abies_amabilis")
 
-#Plotting files
-plot(Abies_poly[,1])#plots the range, but doesn't mean much without any reference
-map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
-plot(Abies_poly,col="forest green",add=TRUE) #adds the range to the map
+# OpenRange functions return NULL if the data source is unavailable,
+# so check the output before using it.
 
-#Getting data from the files
-Abies_poly |>
- st_drop_geometry()
+if(!is.null(Abies_poly)){
+
+ #Plotting files
+ plot(Abies_poly[,1])#plots the range, but doesn't mean much without any reference
+ map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
+ plot(Abies_poly,col="forest green",add=TRUE) #adds the range to the map
+
+ #Getting data from the files
+ Abies_poly |>
+   st_drop_geometry()
+
+}
 
 }
 }

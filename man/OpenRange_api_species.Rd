@@ -23,6 +23,9 @@ OpenRange_api_species downloads range maps for the specified species.
 }
 \note{
 Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
+
+This function relies on an Internet resource.  If that resource is
+unavailable, NULL will be returned along with an informative message.
 }
 \examples{
 \donttest{
@@ -43,30 +46,37 @@ OpenRange_api_species(species = "Abies_amabilis",
                       directory = temp_dir,
                       include_id = TRUE) # saves ranges to a temporary directory
 
-#Reading files
+# Nothing is saved if the data source is unavailable, so check that the
+# file exists before using it.
 
-Abies_poly <- st_read(dsn = temp_dir,
-                      layer = "Abies_amabilis_117684")
+if(file.exists(file.path(temp_dir, "Abies_amabilis_117684.shp"))){
 
-# Get a map to plot on
+  #Reading files
 
-world <- map("world", plot = FALSE, fill = TRUE)|>
-  st_as_sf()
+  Abies_poly <- st_read(dsn = temp_dir,
+                        layer = "Abies_amabilis_117684")
 
-#Plotting files
+  # Get a map to plot on
 
-ggplot(data = world)+
-  geom_sf()+
-  geom_sf(data = Abies_poly,
-          fill="green")+
-  coord_sf(xlim = st_bbox(Abies_poly)[c(1,3)],
-           ylim = st_bbox(Abies_poly)[c(2,4)]) +
-  theme_bw()
+  world <- map("world", plot = FALSE, fill = TRUE)|>
+    st_as_sf()
 
-#Getting data from the files
+  #Plotting files
 
-Abies_poly |>
-  st_drop_geometry()
+  ggplot(data = world)+
+    geom_sf()+
+    geom_sf(data = Abies_poly,
+            fill="green")+
+    coord_sf(xlim = st_bbox(Abies_poly)[c(1,3)],
+             ylim = st_bbox(Abies_poly)[c(2,4)]) +
+    theme_bw()
+
+  #Getting data from the files
+
+  Abies_poly |>
+    st_drop_geometry()
+
+}
 
 }
 }

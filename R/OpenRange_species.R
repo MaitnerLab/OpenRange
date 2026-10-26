@@ -11,7 +11,10 @@
 #' @param match_names_only Check for range maps for the taxa specified without downloading range maps. Default is FALSE.
 #' @param ... Additional arguments passed to internal functions.
 #' @note Details on the construction of BIEN range maps is available at http://bien.nceas.ucsb.edu/bien/biendata/bien-3/
-#' @return Range maps for specified species.
+#' @note This function relies on an Internet resource.  If that resource is
+#'   unavailable, NULL will be returned along with an informative message.
+#' @return Range maps for specified species, or NULL if the database is
+#'   unavailable.
 #' @examples \donttest{
 #' 
 #'library(maps) #a convenient source of maps
@@ -32,19 +35,26 @@
 # OpenRange_species(species = "Abies_lasiocarpa",
 #                   directory = temp_dir)
 # 
-#'#Reading files
+#'# Nothing is saved if the data source is unavailable, so check that the
+#'# file exists before using it.
 #'
-#'Abies_poly <- st_read(dsn = temp_dir,
-#'                      layer = "Abies_amabilis_117684")
+#'if(file.exists(file.path(temp_dir, "Abies_amabilis_117684.shp"))){
 #'
-#'#Plotting files
-#'plot(Abies_poly[,1])#plots the range, but doesn't mean much without any reference
-#'map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
-#'plot(Abies_poly,col="forest green",add=TRUE) #adds the range of Abies lasiocarpa to the map
+#'  #Reading files
 #'
-#'#Getting data from the files
-#'Abies_poly |>
-#'  st_drop_geometry()
+#'  Abies_poly <- st_read(dsn = temp_dir,
+#'                        layer = "Abies_amabilis_117684")
+#'
+#'  #Plotting files
+#'  plot(Abies_poly[,1])#plots the range, but doesn't mean much without any reference
+#'  map('world', fill = TRUE, col = "grey")#plots a world map (WGS84 projection), in grey
+#'  plot(Abies_poly,col="forest green",add=TRUE) #adds the range of Abies lasiocarpa to the map
+#'
+#'  #Getting data from the files
+#'  Abies_poly |>
+#'    st_drop_geometry()
+#'
+#'}
 #'
 #' }
 #' @family range functions
@@ -105,9 +115,12 @@ OpenRange_species <- function(species,
                     scenario_select, default_map_select, 
                    "ORDER BY species ;")
     
+    # Returns NULL (with a message) if the database is unavailable.
     df <- ranges_sql(query)
     
-    if(length(df)==0){
+    if(is.null(df)){return(invisible(NULL))}
+    
+    if(length(df)==0 || length(df$species)==0){
       message("No species matched")
     }else{
       
@@ -115,25 +128,15 @@ OpenRange_species <- function(species,
         
         Species <- df$species[l]
         
-        if(projection==4326){
-          
-          sp_range <- st_as_sf(x = df[l,, drop = FALSE],
-                               wkt = "st_astext",
-                               crs = "epsg:4326")
-          
-          
-        }
+        if(projection==4326){record_crs <- "epsg:4326"}
+        if(projection==3857){record_crs <- "epsg:3857"}
         
-        if(projection==3857){
-          
-          sp_range <- st_as_sf(x = df[l,, drop = FALSE],
-                               wkt = "st_astext",
-                               crs = "epsg:3857")
-          
-          
-        }
+        # Returns NULL (with a message) if the records cannot be interpreted
+        # as spatial data.
+        sp_range <- .as_sf(df = df[l,, drop = FALSE],
+                           crs = record_crs)
         
-        
+        if(is.null(sp_range)){return(invisible(NULL))}
         
         #save output
         if(include_id){
@@ -175,10 +178,12 @@ OpenRange_species <- function(species,
     
     rangeQuery <- paste("SELECT species FROM ranges.range WHERE species in (", paste(shQuote(species, type = "sh"),collapse = ', '), ") ORDER BY species ;")
     # create query to retrieve
+    # Returns NULL (with a message) if the database is unavailable.
     df <- ranges_sql(rangeQuery,...)
     
+    if(is.null(df)){return(invisible(NULL))}
     
-    if(length(df)==0){
+    if(length(df)==0 || length(df$species)==0){
       message("No species matched")
     }else{
       found<-as.data.frame(cbind(species,matrix(nrow=length(species),ncol=1,data="No")))

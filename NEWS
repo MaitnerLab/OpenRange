@@ -1,4 +1,23 @@
 ===============
+# OpenRange 0.0.3
+===============
+
+## Bug fixes
+* Functions that rely on Internet resources (the OpenRange database and the
+  OpenRange API) now fail gracefully, returning NULL along with an informative
+  message rather than throwing an error, when the resource is unavailable,
+  overloaded, or has changed, per CRAN policy and CRAN comments.
+* The vignette now checks whether the OpenRange database is available and skips
+  the chunks that require it when it is not, so that the vignette builds even
+  when the resource cannot be reached.
+* Tests that require an Internet resource are now skipped when that resource is
+  unavailable.
+* Records returned by the database or API that cannot be interpreted as spatial
+  data now produce an informative message rather than an error.
+* Functions no longer error when a query returns no records.
+
+
+===============
 # OpenRange 0.0.2
 ===============
 

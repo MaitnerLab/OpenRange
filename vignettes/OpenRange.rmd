@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{OpenRange R package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  
+
 ---
 
 # Open Range
@@ -19,6 +19,10 @@ The maps currently contained in the Open Range database are available with a CC-
 
 ### Accessing the maps
 The easiest way to access the species range maps is by querying a species name.
+OpenRange relies on an internet connection to a remote database.  If that
+database is unavailable, OpenRange functions return `NULL` along with an
+informative message rather than throwing an error, so it is worth checking the
+output before using it.
 ```{r load species}
 
 library(OpenRange)
@@ -26,7 +30,35 @@ library(OpenRange)
 
 pcontorta <- OpenRange_load_species(species = "Pinus contorta")
 
-plot(pcontorta[2])
+if(!is.null(pcontorta)){
+
+  plot(pcontorta[2])
+
+}
+
+```
+
+```{r availability, include = FALSE}
+
+# Skip the remaining chunks if the database could not be reached (or if the
+# packages used below are not installed) so that the vignette can still be built
+# when the internet resource is unavailable.
+
+openrange_available <- !is.null(pcontorta) &&
+  requireNamespace("tidyverse", quietly = TRUE)
+
+knitr::opts_chunk$set(eval = openrange_available)
+
+```
+
+```{r availability note, eval = TRUE, echo = FALSE, results = "asis"}
+
+if(!openrange_available){
+
+  cat("**Note:** the OpenRange database was not available when this vignette",
+      "was built, so the code below is shown but was not run.\n")
+
+}
 
 ```
 
@@ -40,6 +72,8 @@ library(tidyverse)
 # Grab the stats
   model_stats <- OpenRange_get_stats()
 
+if(!is.null(model_stats)){
+
 # Reformat them into a single table
 
   model_stats_wide <- bind_rows(model_stats$rangebagging %>%
@@ -51,12 +85,13 @@ library(tidyverse)
 
 
 # Get relevant model stats
-  
+
   model_stats_wide %>%
     filter(model_id == pcontorta$model_id)->test
 
-  test %>%
-    select(cv_mean_train_npresence,cv_mean_test_n_presence,cv_mean_test_auc,cv_mean_train_auc)
+  print(test %>%
+    select(cv_mean_train_npresence,cv_mean_test_n_presence,cv_mean_test_auc,cv_mean_train_auc))
 
+}
 
 ```

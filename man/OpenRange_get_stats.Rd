@@ -10,15 +10,29 @@ OpenRange_get_stats(...)
 \item{...}{Additional arguments passed to internal functions.}
 }
 \value{
-List object containing one data.frame for each of the three modeling frameworks.
+List object containing one data.frame for each of the three modeling
+frameworks, or NULL if the database is unavailable.
 }
 \description{
 OpenRange_get_stats provides information on model performance.
+}
+\note{
+This function relies on an Internet resource.  If that resource is
+unavailable, NULL will be returned along with an informative message.
 }
 \examples{
 \donttest{
 
 range_stats <- OpenRange_get_stats()
+
+# OpenRange functions return NULL if the data source is unavailable,
+# so check the output before using it.
+
+if(!is.null(range_stats)){
+
+  names(range_stats)
+
+}
 
 }
 }

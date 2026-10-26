@@ -10,15 +10,29 @@ OpenRange_get_license(...)
 \item{...}{Additional arguments passed to internal functions.}
 }
 \value{
-Data.frame containing information on the license associated with the maps.
+Data.frame containing information on the license associated with the
+maps, or NULL if the database is unavailable.
 }
 \description{
 OpenRange_get_license provides information on model licenses.
+}
+\note{
+This function relies on an Internet resource.  If that resource is
+unavailable, NULL will be returned along with an informative message.
 }
 \examples{
 \donttest{
 
 range_license_info <- OpenRange_get_license()
+
+# OpenRange functions return NULL if the data source is unavailable,
+# so check the output before using it.
+
+if(!is.null(range_license_info)){
+
+  head(range_license_info)
+
+}
 
 }
 }

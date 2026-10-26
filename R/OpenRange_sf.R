@@ -7,19 +7,29 @@
 #' @param scenario Which climate scenario should be represented by maps?  See BIEN_ranges_list_scenarios.
 #' @param default_only Logical. Should only default ranges be included? Default is TRUE.
 #' @template ranges_spatial
-#' @return All range maps that intersect the user-supplied shapefile.
+#' @note This function relies on an Internet resource.  If that resource is
+#'   unavailable, NULL will be returned along with an informative message.
+#' @return All range maps that intersect the user-supplied shapefile, or NULL if
+#'   the database is unavailable.
 #' @examples \donttest{
 #'
 #'saguaro_poly <- OpenRange_load_species("Carnegiea gigantea")
 #'
-#'#Create a temp directory
-#'temp_dir <- file.path(tempdir(), "BIEN_temp")
+#'# OpenRange functions return NULL if the data source is unavailable,
+#'# so check the output before using it.
 #'
-#'#Get range maps for all species with ranges that overlap the range range of saguaros
-#'OpenRange_sf(sf = saguaro_poly,
-#'            directory = temp_dir)
+#'if(!is.null(saguaro_poly)){
 #'
-#'#Note that this will save many sfs to the directory (or working directory)
+#'  #Create a temp directory
+#'  temp_dir <- file.path(tempdir(), "BIEN_temp")
+#'
+#'  #Get range maps for all species with ranges that overlap the range of saguaros
+#'  OpenRange_sf(sf = saguaro_poly,
+#'               directory = temp_dir)
+#'
+#'  #Note that this will save many sfs to the directory (or working directory)
+#'
+#'}
 #' }
 #' @family range functions
 #' @import sf
@@ -115,10 +125,13 @@ OpenRange_sf <- function(sf,
       
     }
     
-    # execute the query
+    # execute the query.
+    # Returns NULL (with a message) if the database is unavailable.
     df <- ranges_sql(query = query, limit =10)
     
-    if(length(df)==0){
+    if(is.null(df)){return(invisible(NULL))}
+    
+    if(length(df)==0 || length(df$species)==0){
       
       message("No species matched")
       
@@ -128,22 +141,15 @@ OpenRange_sf <- function(sf,
         
         Species <- df$species[l]
         
-        if(projection==3857){
-          
-          sp_range <- st_as_sf(x = df[l,, drop = FALSE],
-                               wkt = "st_astext",
-                               crs = "epsg:3857")
-          
-        }
+        if(projection==4326){record_crs <- "epsg:4326"}
+        if(projection==3857){record_crs <- "epsg:3857"}
         
-        if(projection==4326){
-          
-          sp_range <- st_as_sf(x = df[l,, drop = FALSE],
-                               wkt = "st_astext",
-                               crs = "epsg:4326")
-          
-          
-        }
+        # Returns NULL (with a message) if the records cannot be interpreted
+        # as spatial data.
+        sp_range <- .as_sf(df = df[l,, drop = FALSE],
+                           crs = record_crs)
+        
+        if(is.null(sp_range)){return(invisible(NULL))}
         
 
           if(include.gid==T){
@@ -188,9 +194,12 @@ OpenRange_sf <- function(sf,
     
     # create query to retrieve
     
+    # Returns NULL (with a message) if the database is unavailable.
     df <- ranges_sql(query)
     
-    if(length(df)==0){
+    if(is.null(df)){return(invisible(NULL))}
+    
+    if(length(df)==0 || nrow(df)==0){
       message("No species found")
     }else{
       return(df)

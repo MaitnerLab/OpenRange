@@ -9,8 +9,15 @@
 # url <- "www.google.com"
 # url <- "www.hisstank.com"
 
-library("vcr") # *Required* as vcr is set up on loading
+# vcr is used to record API responses so that the API tests do not require an
+# internet connection.  It is only Suggested, so configure it only if present.
 
-invisible(vcr::vcr_configure(
-  dir = vcr::vcr_test_path("fixtures")
-))
+if (requireNamespace("vcr", quietly = TRUE)) {
+
+  library("vcr") # *Required* as vcr is set up on loading
+
+  invisible(vcr::vcr_configure(
+    dir = vcr::vcr_test_path("fixtures")
+  ))
+
+}
