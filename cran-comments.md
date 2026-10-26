@@ -6,10 +6,15 @@
 * macos-13 on GitHub
 * macos-latest on GitHub
 * windows-latest on GitHub
+* R-hub v2: linux (R-devel), windows (R-devel), macos (R-devel)
 
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
+
+The R-hub run for this version reported "Status: OK" on linux and windows
+R-devel, with "checking examples with --run-donttest" and "checking
+re-building of vignette outputs" both OK; the macos R-devel check also passed.
 
 ## Notes
 
