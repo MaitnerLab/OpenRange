@@ -32,6 +32,13 @@ stopifnot(length(chk$errors) == 0, length(chk$warnings) == 0)
 #    "examples with --run-donttest" or "re-building of vignette outputs" dies
 #    mid-download, re-run before believing it. The remote builders in step 5
 #    are the ones to trust.
+#
+#    When this happens inside a command that shells out to R CMD, such as
+#    devtools::build() or devtools::check() building the vignette, the child
+#    process is the one that dies and you get "System command 'Rcmd.exe'
+#    failed" instead; sometimes it takes the calling session with it. Either
+#    way it is the machine, not the package: GitHub Actions builds the vignette
+#    on all five platforms without trouble.
 
 # URLs in Rd files, README and DESCRIPTION.
 urlchecker::url_check()
@@ -43,7 +50,13 @@ spelling::spell_check_package()
 
 # Tarball must stay comfortably under CRAN's 5 MB limit. The vcr cassette in
 # tests/fixtures is the bulk of it.
-tb <- devtools::build(path = tempdir(), quiet = TRUE)
+#
+# vignettes = FALSE is deliberate: building the vignette queries the database,
+# which is the step that dies on this machine (see the note above). The
+# rendered vignette in inst/doc only adds about 10 KB, and the package is
+# around 250 KB against a 5 MB limit, so skipping it costs nothing here.
+# Section 3's check() builds the full tarball if you want the exact figure.
+tb <- devtools::build(path = tempdir(), vignettes = FALSE, quiet = TRUE)
 cat(basename(tb), round(file.size(tb) / 1024), "KB\n")
 stopifnot(file.size(tb) < 4 * 1024^2)
 
