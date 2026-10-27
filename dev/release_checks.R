@@ -18,8 +18,22 @@ devtools::document()
 
 # 3. Local checks -----------------------------------------------------------
 devtools::test()
-chk <- devtools::check(cran = TRUE, incoming = TRUE, remote = TRUE)
+
+# devtools::check() documents first, which section 2 already did, so skip it.
+chk <- devtools::check(document = FALSE, cran = TRUE, incoming = TRUE, remote = TRUE)
 stopifnot(length(chk$errors) == 0, length(chk$warnings) == 0)
+
+# If that call dies instead of returning -- "System command 'Rcmd.exe' failed",
+# or the session itself disappearing -- it is the local crash described below,
+# not the package. An R-level retry cannot help, because the thing that dies is
+# sometimes the calling session, so use the shell-level loop instead:
+#
+#   & .\dev\check_cran.ps1 -Attempts 6
+#
+# It builds and checks from a short path, retries, keeps the build log, and
+# prints the Status line. When even that cannot get through, the database is
+# dropping the vignette's large download; rely on section 5's remote builders
+# and the GitHub Actions runs, which do this reliably.
 # "unable to verify current time" is the local network, not the package.
 #
 # Two local gotchas on Windows, neither of them the package:
