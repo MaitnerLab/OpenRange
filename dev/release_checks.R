@@ -24,35 +24,43 @@ chk <- devtools::check(document = FALSE, cran = TRUE, incoming = TRUE, remote = 
 stopifnot(length(chk$errors) == 0, length(chk$warnings) == 0)
 
 # If that call dies instead of returning -- "System command 'Rcmd.exe' failed",
-# or the session itself disappearing -- it is the local crash described below,
-# not the package. An R-level retry cannot help, because the thing that dies is
-# sometimes the calling session, so use the shell-level loop instead:
+# or the session itself vanishing with exit 15 and no R-level error -- look at
+# what else is running before suspecting the package. See the second gotcha.
 #
-#   & .\dev\check_cran.ps1 -Attempts 6
-#
-# It builds and checks from a short path, retries, keeps the build log, and
-# prints the Status line. When even that cannot get through, the database is
-# dropping the vignette's large download; rely on section 5's remote builders
-# and the GitHub Actions runs, which do this reliably.
 # "unable to verify current time" is the local network, not the package.
 #
 # Two local gotchas on Windows, neither of them the package:
 #  * Run the check from a SHORT path (e.g. C:/orchk). Under a deep working
 #    directory the install step blows past the Windows path limit and R dies
 #    with exit 15 and no error message.
-#  * Large result sets from the database occasionally kill the R process
-#    outright (exit 15, no R-level error, nothing tryCatch can catch). It
-#    reproduces with plain DBI/RPostgreSQL and no OpenRange code, so if
-#    "examples with --run-donttest" or "re-building of vignette outputs" dies
-#    mid-download, re-run before believing it. The remote builders in step 5
-#    are the ones to trust.
+#  * Another memory-hungry R job running at the same time will get this one
+#    killed. Windows runs out of commit and tears down whichever R processes
+#    are resident, with no R-level error and nothing tryCatch can catch. A
+#    small idle R process is as likely a victim as a large one, which is what
+#    makes the failures look random and unrelated to what the check was doing
+#    at the time -- so the step it dies on tells you nothing.
 #
-#    When this happens inside a command that shells out to R CMD, such as
-#    devtools::build() or devtools::check() building the vignette, the child
-#    process is the one that dies and you get "System command 'Rcmd.exe'
-#    failed" instead; sometimes it takes the calling session with it. Either
-#    way it is the machine, not the package: GitHub Actions builds the vignette
-#    on all five platforms without trouble.
+#    Measured 2026-10-27: a trivial 60-second R script survived 1 of 4 runs
+#    while the Verts clean_group.R cluster was running, and 6 of 6 after it
+#    stopped -- the second set with the Claude desktop app open and an R CMD
+#    check running alongside, so neither of those is the cause. Windows had
+#    logged Resource-Exhaustion-Detector event 2004 on four earlier days
+#    naming Rscript.exe at 15 to 45 GB of virtual memory.
+#
+#    So before a release check, give the machine to itself, or at least look:
+#      Get-Process Rscript, R, Rterm | Select Id, @{n='MB';e={[int]($_.WorkingSet64/1MB)}}
+#      Get-WinEvent -FilterHashtable @{LogName='System';
+#        ProviderName='Microsoft-Windows-Resource-Exhaustion-Detector'} -MaxEvents 5
+#    With nothing else competing, the check completes normally and none of the
+#    retry machinery below is needed.
+#
+#    When you cannot clear the machine, dev/check_cran.ps1 retries from outside
+#    R, which survives the calling session being killed:
+#
+#      & .\dev\check_cran.ps1 -Attempts 6
+#
+#    The remote builders in step 5 and the GitHub Actions runs are unaffected
+#    either way, and are the ones to trust.
 
 # URLs in Rd files, README and DESCRIPTION.
 urlchecker::url_check()
@@ -65,11 +73,12 @@ spelling::spell_check_package()
 # Tarball must stay comfortably under CRAN's 5 MB limit. The vcr cassette in
 # tests/fixtures is the bulk of it.
 #
-# vignettes = FALSE is deliberate: building the vignette queries the database,
-# which is the step that dies on this machine (see the note above). The
-# rendered vignette in inst/doc only adds about 10 KB, and the package is
-# around 250 KB against a 5 MB limit, so skipping it costs nothing here.
-# Section 3's check() builds the full tarball if you want the exact figure.
+# vignettes = FALSE just saves time: the rendered vignette in inst/doc adds
+# only about 10 KB, and the package is around 250 KB against a 5 MB limit, so
+# skipping it costs this measurement nothing. Section 3's check() builds the
+# full tarball if you want the exact figure. (An earlier version of this file
+# justified the flag as a way round the vignette's database query dying; that
+# was the wrong diagnosis -- see the second gotcha in section 3.)
 tb <- devtools::build(path = tempdir(), vignettes = FALSE, quiet = TRUE)
 cat(basename(tb), round(file.size(tb) / 1024), "KB\n")
 stopifnot(file.size(tb) < 4 * 1024^2)

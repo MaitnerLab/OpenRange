@@ -1,11 +1,18 @@
 # Build the tarball and run R CMD check --as-cran, retrying, from a short path.
 #
-# Why this exists. devtools::check() builds the vignette in a child R process,
-# and the vignette queries the OpenRange database. On this machine a large
-# transfer intermittently kills R outright, and it sometimes takes the calling
-# session down with it, so a retry loop written in R cannot survive its own
-# failure. This loop lives outside R, so a dead R process costs one attempt
-# instead of the whole run. It also works around two other local traps:
+# Why this exists. When another memory-hungry R job is running, Windows runs
+# out of commit and tears down whichever R processes are resident -- no
+# R-level error, nothing tryCatch can catch, and a trivial R process is as
+# likely a victim as a heavy one. devtools::check() dies either as "System
+# command 'Rcmd.exe' failed" (its child went) or by the calling session simply
+# vanishing, so a retry loop written in R cannot survive its own failure. This
+# loop lives outside R, so a dead R process costs one attempt instead of the
+# whole run.
+#
+# It is insurance, not a fix. The fix is to give the machine to itself: with
+# nothing else competing the check completes first time and none of this is
+# needed. dev/release_checks.R section 3 has the evidence and the commands for
+# seeing what else is running. It also works around two other local traps:
 #
 #   * Windows path length. Under a deep working directory the install step
 #     overruns the limit and R dies with no message, so the check runs in
@@ -18,7 +25,7 @@
 # Usage, from the package root in PowerShell:
 #   & .\dev\check_cran.ps1
 #   & .\dev\check_cran.ps1 -Attempts 6
-#   & .\dev\check_cran.ps1 -NoVignettes   # when the vignette will not build
+#   & .\dev\check_cran.ps1 -NoVignettes   # skip the vignette rebuild
 #   & .\dev\check_cran.ps1 -Remote        # include the remote incoming checks
 #
 # The leading & is needed because PowerShell will not run a script from the
@@ -27,12 +34,12 @@
 # A green run ends with "Status: OK". Anything else is printed in full. Logs
 # are left in -WorkDir as build.log and check.log.
 #
-# -NoVignettes skips the vignette rebuild in both the build and the check. That
-# is the escape hatch for when the database will not cooperate: everything else
-# in the check still runs, and the vignette is covered by GitHub Actions and
-# R-hub, which build it reliably. Expect one extra NOTE in that mode, "Package
-# has a VignetteBuilder field but no prebuilt vignette index", which is caused
-# by the flag and not by the package.
+# -NoVignettes skips the vignette rebuild in both the build and the check,
+# which shortens the run. Everything else in the check still runs, and GitHub
+# Actions and R-hub build the vignette on every push anyway. Expect one extra
+# NOTE in that mode, "Package has a VignetteBuilder field but no prebuilt
+# vignette index", caused by the flag and not by the package. This is a
+# convenience, not a workaround: the vignette is not what fails here.
 
 param(
   [string]$Pkg      = (Get-Location).Path,
@@ -131,10 +138,11 @@ if (-not $built) {
   Write-Output ""
   Write-Output "BUILD FAILED after $Attempts attempts. Full log: $buildLog"
   Write-Output ""
-  Write-Output "Exit 15 with no message at 'creating vignettes' is the local crash."
-  Write-Output "Check free memory, since a build spawns several R processes, then"
-  Write-Output "either run this again or use -NoVignettes to check everything else."
-  Write-Output "Exit 1 there is a real vignette error and the log is the thing to read."
+  Write-Output "Exit 15 with no message means R was torn down, not that it failed."
+  Write-Output "Almost always another memory-hungry R job is running. Check with"
+  Write-Output "  Get-Process Rscript, R, Rterm | Select Id, ProcessName"
+  Write-Output "and stop it or wait, rather than retrying into the same wall."
+  Write-Output "Exit 1 is a real error and the log above is the thing to read."
   exit 1
 }
 
