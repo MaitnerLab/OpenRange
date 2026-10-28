@@ -5,3 +5,5 @@
 misc
 *.Rproj
 .positai
+/OpenRange_*.tar.gz
+*.Rcheck/

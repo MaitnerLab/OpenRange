@@ -1,6 +1,4 @@
-===============
 # OpenRange 0.0.3
-===============
 
 ## Bug fixes
 * Functions that rely on Internet resources (the OpenRange database and the
@@ -17,9 +15,7 @@
 * Functions no longer error when a query returns no records.
 
 
-===============
 # OpenRange 0.0.2
-===============
 
 ## NEW FEATURES
 * Updates to allow downloading multiple scenarios
@@ -29,9 +25,7 @@
   the package uses the native pipe (|>).
 
 
-===============
 # OpenRange 0.0.1
-===============
 
 ## NEW FEATURES
 
