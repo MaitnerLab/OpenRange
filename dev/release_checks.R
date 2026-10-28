@@ -136,15 +136,27 @@ devtools::check_win_devel()            # CRAN's Windows R-devel builder
 devtools::check_win_release()
 devtools::check_win_oldrelease()
 # R-hub v2 runs in this repo's own GitHub Actions (.github/workflows/rhub.yaml).
-# The platforms below are the CRAN-flavoured set for a pure-R package: the
-# three OS runners, current and patched R, the alternative-BLAS Fedora build,
-# no-Suggests, and \donttest examples. The call dispatches the workflow and
-# prints the run URL; the package must be committed and pushed first, since the
-# run checks what is on GitHub.
+# The platforms below are the three OS runners, current and patched R, and
+# \donttest examples. The call dispatches the workflow and prints the run URL;
+# the package must be committed and pushed first, since the run checks what is
+# on GitHub.
+#
+# "atlas" and "nosuggests" are deliberately NOT in this list. Both are minimal
+# Fedora containers without the PostgreSQL client headers, so RPostgreSQL --
+# which OpenRange has in Depends -- cannot be built from source there:
+#
+#   RS-PostgreSQL.h:23:14: fatal error: libpq-fe.h: No such file or directory
+#   ERROR: compilation failed for package 'RPostgreSQL'
+#
+# The check never starts, so those jobs go red for a reason that has nothing to
+# do with this package (run 40553018879, 2026-10-27, where the other six were
+# Status: OK). RPostgreSQL declares no SystemRequirements, which is why r-hub's
+# sysreqs step does not install libpq for it; that is upstream's to fix. CRAN's
+# own Fedora flavours do have libpq, so this is not a submission risk. Add them
+# back only if you want to watch for that changing.
 rhub::rhub_doctor()
 rhub::rhub_check(platforms = c("linux", "windows", "macos",
-                               "ubuntu-release", "ubuntu-next", "atlas",
-                               "nosuggests", "donttest"))
+                               "ubuntu-release", "ubuntu-next", "donttest"))
 
 # 6. Submit -----------------------------------------------------------------
 # devtools::release()                  # interactive checklist, then uploads

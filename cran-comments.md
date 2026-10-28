@@ -6,15 +6,22 @@
 * macos-13 on GitHub
 * macos-latest on GitHub
 * windows-latest on GitHub
-* R-hub v2: linux (R-devel), windows (R-devel), macos (R-devel)
+* R-hub v2: linux (R-devel), windows (R-devel), macos (R-devel),
+  ubuntu-release, ubuntu-next, donttest
 
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
 
-The R-hub run for this version reported "Status: OK" on linux and windows
-R-devel, with "checking examples with --run-donttest" and "checking
-re-building of vignette outputs" both OK; the macos R-devel check also passed.
+The R-hub runs for this version reported "Status: OK" on linux R-devel,
+windows R-devel, ubuntu-release, ubuntu-next and the \donttest platform, with
+"checking examples with --run-donttest" and "checking re-building of vignette
+outputs" both OK; the macos R-devel check also passed.
+
+The R-hub "atlas" and "nosuggests" containers could not be used: they lack the
+PostgreSQL client headers, so RPostgreSQL (in Depends) fails to build there
+with "libpq-fe.h: No such file or directory" and the check never starts. That
+is a property of those containers, not of this package.
 
 ## Notes
 
