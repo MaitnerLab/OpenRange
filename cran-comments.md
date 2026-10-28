@@ -2,10 +2,8 @@
 * local  "Windows" "10 x64" "build 17763",  R 4.4.1
 * win-builder
 * macOS builder
-* ubuntu-latest on GitHub
-* macos-13 on GitHub
-* macos-latest on GitHub
-* windows-latest on GitHub
+* GitHub Actions: ubuntu-latest (R-devel, R-release, R-oldrel-1),
+  macos-latest (R-release), windows-latest (R-release)
 * R-hub v2: linux (R-devel), windows (R-devel), macos (R-devel),
   ubuntu-release, ubuntu-next, donttest
 
@@ -13,10 +11,10 @@
 
 0 errors | 0 warnings | 0 notes
 
-The R-hub runs for this version reported "Status: OK" on linux R-devel,
-windows R-devel, ubuntu-release, ubuntu-next and the \donttest platform, with
-"checking examples with --run-donttest" and "checking re-building of vignette
-outputs" both OK; the macos R-devel check also passed.
+The R-hub runs for this version reported "Status: OK" on all six platforms
+used -- linux R-devel, windows R-devel, macos R-devel, ubuntu-release,
+ubuntu-next and the \donttest platform -- with "checking examples with
+--run-donttest" and "checking re-building of vignette outputs" both OK.
 
 The R-hub "atlas" and "nosuggests" containers could not be used: they lack the
 PostgreSQL client headers, so RPostgreSQL (in Depends) fails to build there
